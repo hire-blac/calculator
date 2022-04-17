@@ -1,0 +1,38 @@
+div {
+  border-radius: 5px;
+}
+.calculator {
+  width: 350px;
+  margin: 40px auto;
+  border: solid 1px black;
+  padding: 20px;
+}
+.display {
+  border: solid 1px #ddd;
+  padding: 20px;
+  margin: 10px 0;
+  text-align: end;
+  background-color: white;
+}
+.keypad {
+  padding: 10px;
+  background-color: white;
+}
+.key-row {
+  display: flex;
+  justify-content: space-between;
+  margin:  0 0 20px;
+}
+.key {
+  text-align: center;
+  width: 30px;
+  height: 30px;
+  padding: 15px 20px 0;
+  border: solid 1px #ddd;
+}
+.clear, .delete {
+  width: 110px;
+}
+.key:hover {
+  box-shadow: 1px 1px 3px #ccc;
+}
