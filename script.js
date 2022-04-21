@@ -17,34 +17,87 @@ let displayString = '';
 // perform calculation
 function calculate(num1, num2, operator){
   let answer = 0;
-  switch (operator) {
-    case '+':
-      answer = num1 + num2;
-      break;
-    case '-':
-      answer = num1 - num2;
-      break;
-    case 'x':
-      answer = num1 * num2;
-      break;
-    case '/':
-      answer = num1 / num2;
-      break;
-    default:
-      break;
-  }
+  if(isNaN(num1) || isNaN(num2)){
 
+  } else {
+    switch (operator) {
+      case '+':
+        answer = num1 + num2;
+        break;
+      case '-':
+        answer = num1 - num2;
+        break;
+      case 'x':
+        answer = num1 * num2;
+        break;
+      case '/':
+        if(num2 === 0){
+          answer = "Cannot divide by 0"
+        } else {
+          answer = num1 / num2;
+        }
+        break;
+      default:
+        break;
+    }
+  }
+  
   // display values
   displayCalculations(smallDisplay, displayString);
   displayString = answer;
   displayCalculations(bigDisplay, displayString);
 
-  // reset numberString and secondNum
+  // reset numberString, operator and secondNum
   numberString = '';
+  operator = '';
   secondNum = 0;
 
   return answer;
 }
+
+// delete function
+function deleteNumber(){
+  let displayLen = displayString.length;
+  let firstNumString = firstNum.toString();
+  let firstNumLen = firstNumString.length;
+  let secondNumString = secondNum.toString();
+  let secondNumLlen = secondNumString.length;
+  
+  if (secondNum != 0) {
+    // remove last digit of second number
+    secondNumString = secondNumString.slice(0, secondNumLlen - 1);
+    secondNum = Number(secondNumString);
+
+    // update display
+    displayString = displayString.slice(0, displayLen - 1);
+    displayCalculations(bigDisplay, displayString);
+
+  } else if(operator){
+    // delete operator
+    operator = '';
+
+    // update display
+    if(isNaN(displayString)){
+      displayString = displayString.slice(0, displayLen - 3);
+      displayCalculations(bigDisplay, displayString);
+    } else {
+      location.reload();
+    }
+    
+  } else {
+    // remove last digit of second number
+    firstNumString = firstNumString.slice(0, firstNumLen - 1);
+    firstNum = Number(firstNumString);
+
+    // update display
+    if(isNaN(displayString)){
+      displayString = displayString.slice(0, displayLen - 3);
+      displayCalculations(bigDisplay, displayString);
+    } else {
+      location.reload();
+    }
+  }
+} 
 
 // display calculations
 function displayCalculations(element, displayValue){
@@ -103,6 +156,8 @@ equalsKey.addEventListener('click', e => {
   
 })
 
+// add event listener for delete key
+deleteKey.addEventListener('click', deleteNumber);
 // add event listener for clear key
 clearKey.addEventListener('click', e => {
   location.reload();
