@@ -40,3 +40,11 @@ h2 {
 .key:hover {
   box-shadow: 1px 1px 4px #888;
 }
+.footer {
+  width: max-content;
+  margin: 100px auto;
+}
+.footer a {
+  text-decoration: none;
+  color: black;
+}
