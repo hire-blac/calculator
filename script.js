@@ -14,6 +14,47 @@ let secondNum = 0;
 let numberString = '';
 let displayString = '';
 
+// function to input a number
+function inputNumber(keyValue){
+  if(!operator){ // operator has not been set before
+    numberString += keyValue;
+    firstNum = Number(numberString);
+
+    // display values
+    displayString += keyValue;
+    displayCalculations(bigDisplay, displayString);
+    
+  } else { // perform calculation for previous operator befor setting a new one
+    numberString += keyValue;
+    secondNum = Number(numberString);
+
+    // display values
+    displayString += keyValue;
+    displayCalculations(bigDisplay, displayString);
+  }
+}
+
+// function to input operator
+function inputOperator(keyValue){
+  if(!operator){
+    numberString = '';
+    operator = keyValue;
+
+    // display values
+    displayString += " " + keyValue + " ";
+    displayCalculations(bigDisplay, displayString);
+
+  } else {
+    firstNum = calculate(firstNum, secondNum, operator);
+    
+    operator = keyValue;
+
+    // display values
+    displayString += " " + keyValue + " ";
+    displayCalculations(bigDisplay, displayString);
+  }
+}
+
 // perform calculation
 function calculate(num1, num2, operator){
   let answer = 0;
@@ -27,7 +68,7 @@ function calculate(num1, num2, operator){
       case '-':
         answer = num1 - num2;
         break;
-      case 'x':
+      case '*':
         answer = num1 * num2;
         break;
       case '/':
@@ -106,52 +147,16 @@ function displayCalculations(element, displayValue){
 
 // add event handler to number keys to set a value for first or second num
 numberKeys.forEach(key => {
-  key.addEventListener("click", e => {
-    if(!operator){ // operator has not been set before
-      numberString += key.dataset.value;
-      firstNum = Number(numberString);
-
-      // display values
-      displayString += key.dataset.value;
-      displayCalculations(bigDisplay, displayString);
-      
-    } else { // perform calculation for previous operator befor setting a new one
-      numberString += key.dataset.value;
-      secondNum = Number(numberString);
-
-      // display values
-      displayString += key.dataset.value;
-      displayCalculations(bigDisplay, displayString);
-    }
-    
-  });
+  key.addEventListener("click", () => inputNumber(key.dataset.value));
 });
 
 // add event handler to operator keys to set a value for operator
 operatorKeys.forEach(key => {
-  key.addEventListener("click", e => {
-    if(!operator){
-      numberString = '';
-      operator = key.dataset.value;
-
-      // display values
-      displayString += " " + key.dataset.value + " ";
-      displayCalculations(bigDisplay, displayString);
-
-    } else {
-      firstNum = calculate(firstNum, secondNum, operator);
-      
-      operator = key.dataset.value;
-
-      // display values
-      displayString += " " + key.dataset.value + " ";
-      displayCalculations(bigDisplay, displayString);
-    }
-  });
+  key.addEventListener("click", () => inputOperator(key.dataset.value));
 });
 
 // add event listener for equals key
-equalsKey.addEventListener('click', e => {
+equalsKey.addEventListener('click', () => {
   firstNum = calculate(firstNum, secondNum, operator);
   
 })
@@ -159,6 +164,33 @@ equalsKey.addEventListener('click', e => {
 // add event listener for delete key
 deleteKey.addEventListener('click', deleteNumber);
 // add event listener for clear key
-clearKey.addEventListener('click', e => {
+clearKey.addEventListener('click', () => {
   location.reload();
+})
+
+// keyboard support functionality
+window.addEventListener('keydown', e => {
+  let key;
+  
+  if (e.key === 'Enter') { // if Enter key is pressed
+    key = document.querySelector('.equals');
+  }else {
+    key = document.querySelector(`.key[data-value="${e.key}"]`);
+  }
+
+  if(key){
+    key.classList.forEach(className => {
+      if(className === 'number'){
+        inputNumber(key.dataset.value);
+      } else if (className === 'operator') {
+        inputOperator(key.dataset.value);
+      } else if (className === 'equals') {
+        firstNum = calculate(firstNum, secondNum, operator);
+      } else if (className === 'delete') {
+        deleteNumber();
+      } else if (className === 'clear') {
+        location.reload();
+      }
+    });
+  }
 })
